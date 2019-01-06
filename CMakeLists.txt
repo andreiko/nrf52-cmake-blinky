@@ -70,7 +70,6 @@ add_executable(${CMAKE_PROJECT_NAME}
         ${NRF52_SDK}/modules/nrfx/mdk/system_nrf52.c
 )
 
-
 add_custom_command(
         OUTPUT ${CMAKE_PROJECT_NAME}.hex
         COMMAND arm-none-eabi-objcopy -O ihex ${CMAKE_PROJECT_NAME} ${CMAKE_PROJECT_NAME}.hex
@@ -85,7 +84,7 @@ add_custom_target(
 add_custom_target(
         flash
         DEPENDS ${CMAKE_PROJECT_NAME}.hex
-        COMMAND nrfjprog -f nrf52 --program ${CMAKE_PROJECT_NAME}.hex --sectorerase
+        COMMAND nrfjprog -f nrf52 --program ${CMAKE_PROJECT_NAME}.hex --sectorerase --reset
 )
 
 add_custom_target(
