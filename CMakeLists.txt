@@ -89,7 +89,7 @@ add_custom_target(
 
 add_custom_target(
         flash_softdevice
-        COMMAND nrfjprog -f nrf52 --program ${SDK_ROOT}/components/softdevice/s132/hex/s132_nrf52_6.1.0_softdevice.hex --sectorerase
+        COMMAND nrfjprog -f nrf52 --program ${NRF52_SDK}/components/softdevice/s132/hex/s132_nrf52_6.1.0_softdevice.hex --sectorerase
 )
 
 add_custom_target(
