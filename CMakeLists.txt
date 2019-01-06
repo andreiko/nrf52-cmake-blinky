@@ -64,8 +64,41 @@ set(CMAKE_EXE_LINKER_FLAGS "${ARCH_FLAGS} \
 
 set(CMAKE_C_LINK_EXECUTABLE "${CMAKE_C_COMPILER} <LINK_FLAGS> <OBJECTS> -o <TARGET>")
 
-add_executable(blinky
+add_executable(${CMAKE_PROJECT_NAME}
         main.c
         ${NRF52_SDK}/modules/nrfx/mdk/gcc_startup_nrf52.S
         ${NRF52_SDK}/modules/nrfx/mdk/system_nrf52.c
+)
+
+
+add_custom_command(
+        OUTPUT ${CMAKE_PROJECT_NAME}.hex
+        COMMAND arm-none-eabi-objcopy -O ihex ${CMAKE_PROJECT_NAME} ${CMAKE_PROJECT_NAME}.hex
+        DEPENDS ${CMAKE_PROJECT_NAME}
+)
+
+add_custom_target(
+        hex
+        DEPENDS ${CMAKE_PROJECT_NAME}.hex
+)
+
+add_custom_target(
+        flash
+        DEPENDS ${CMAKE_PROJECT_NAME}.hex
+        COMMAND nrfjprog -f nrf52 --program ${CMAKE_PROJECT_NAME}.hex --sectorerase
+)
+
+add_custom_target(
+        flash_softdevice
+        COMMAND nrfjprog -f nrf52 --program ${SDK_ROOT}/components/softdevice/s132/hex/s132_nrf52_6.1.0_softdevice.hex --sectorerase
+)
+
+add_custom_target(
+        reset
+        COMMAND nrfjprog -f nrf52 --reset
+)
+
+add_custom_target(
+        erase
+        COMMAND nrfjprog -f nrf52 --eraseall
 )
